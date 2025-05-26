@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap');  
+@import 'tailwindcss';  
+
+
+@theme {
+    /* green-600 untuk text, button, border*/ 
+    --color-green-primary: #16a34a; 
+    /* green-500 untuk hover, title*/
+    --color-green-secondary: #15803d;
+    /* gray-900 hover button login*/
+    --color-green-tertiary: #22c55e;
+
+    /* gray-700 untuk link nav*/ 
+    --color-gray-primary: #4a5568;
+    /* gray-600 untuk text content*/ 
+    --color-gray-primary: #4b5563;
+}
+
