@@ -1,6 +1,8 @@
-import React, { useState, useRef } from 'react';  
+import React, { useState, useRef, useEffect } from 'react';  
 import { Upload, Camera, X, RefreshCw, ArrowLeft } from 'lucide-react';  
 import { useNavigate } from 'react-router-dom';  
+import { useLocation } from 'react-router-dom';
+
 
 const DetectionPage = () => {  
     const navigate = useNavigate();  
@@ -11,6 +13,26 @@ const DetectionPage = () => {
     const fileInputRef = useRef(null);  
     const videoRef = useRef(null);  
     const canvasRef = useRef(null);  
+    const location = useLocation();
+
+    useEffect(() => {
+  if (location.state?.capturedImage) {
+    setPreviewImage(location.state.capturedImage);
+    const blob = dataURLtoBlob(location.state.capturedImage);
+    setSelectedImage(blob);
+  }
+}, [location.state]);
+
+const dataURLtoBlob = (dataURL) => {
+  const byteString = atob(dataURL.split(',')[1]);
+  const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ab], { type: mimeString });
+};
 
     // Handle image upload  
     const handleImageUpload = (event) => {  
@@ -113,6 +135,10 @@ const DetectionPage = () => {
     };  
 
     // Detection handling  
+    // Handle take picture button click
+        const handleTakePicture = () => {
+    navigate('/detection/take-picture');
+    };
     const handleDetection = async () => {  
         if (selectedImage) {  
             setIsDetecting(true);
@@ -253,7 +279,7 @@ const DetectionPage = () => {
                                             <Upload size={20} className="mr-2" /> Pilih Gambar  
                                         </button>  
                                         <button  
-                                            onClick={startCapture}  
+                                            onClick={handleTakePicture}  
                                             className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center justify-center transition-colors shadow-md"  
                                         >  
                                             <Camera size={20} className="mr-2" /> Ambil Foto  

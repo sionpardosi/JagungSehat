@@ -2,11 +2,13 @@ import { createBrowserRouter } from "react-router-dom";
 
 import MainLayout from "./components/layouts/MainLayout";
 import DetectionLayout from "./components/layouts/DetectionLayout";
+import CameraLayout from "./components/layouts/CameraLayout";
 import DashboardLayout from "./components/layouts/DashboardLayout";
 import AuthLayout from "./components/layouts/AuthLayout";
 
 import HomePage from "./pages/home/HomePage";
 import DetectionPage from "./pages/home/DetectionPage";
+import TakePicture from "./pages/home/TakePicture";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import HistoryPage from './pages/history/HistoryPage';
@@ -37,6 +39,16 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  {
+  path: "/detection/take-picture",
+  element: <CameraLayout />,
+  children: [
+    {
+      index: true,
+      element: <TakePicture />,
+    },
+  ],
+},
   {
     path: "/dashboard",
     element: <DashboardLayout />,

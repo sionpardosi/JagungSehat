@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Link } from 'react-router';
 import Sidebar from '../../components/dashboard/Sidebar';
 import { Download, Eye, Search } from 'lucide-react';
@@ -51,6 +52,8 @@ const DiseaseManagement = () => {
         }
     ];
 
+    const [searchTerm, setSearchTerm] = useState('');
+
     const getSeverityColor = (severity) => {
         switch (severity) {
             case 'Tinggi':
@@ -62,6 +65,42 @@ const DiseaseManagement = () => {
             default:
                 return 'bg-gray-100 text-gray-800';
         }
+    };
+
+    // Filter data berdasarkan searchTerm (case-insensitive)
+    const filteredData = diseaseData.filter(disease => {
+        const term = searchTerm.toLowerCase();
+        return (
+            disease.name.toLowerCase().includes(term) ||
+            disease.scientificName.toLowerCase().includes(term) ||
+            disease.symptoms.toLowerCase().includes(term)
+        );
+    });
+
+    // Fungsi export CSV sederhana
+    const exportCSV = () => {
+        const headers = ['No', 'Nama Penyakit', 'Nama Ilmiah', 'Gejala', 'Tingkat Keparahan', 'Penanganan', 'Status'];
+        const rows = filteredData.map((disease, index) => [
+            index + 1,
+            disease.name,
+            disease.scientificName,
+            disease.symptoms,
+            disease.severity,
+            disease.treatment,
+            disease.status
+        ]);
+
+        let csvContent = "data:text/csv;charset=utf-8," 
+            + headers.join(",") + "\n" 
+            + rows.map(e => e.map(field => `"${field}"`).join(",")).join("\n");
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "disease_data.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     return (
@@ -85,7 +124,11 @@ const DiseaseManagement = () => {
                 <section className="bg-white rounded-lg shadow p-6 mb-8">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div className="flex flex-col sm:flex-row gap-3">
-                            <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2">
+                            <button
+                                onClick={exportCSV}
+                                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+                                type="button"
+                            >
                                 <Download className="w-5 h-5" />
                                 Export Data
                             </button>
@@ -96,6 +139,8 @@ const DiseaseManagement = () => {
                                     type="text"
                                     placeholder="Cari penyakit..."
                                     className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    value={searchTerm}
+                                    onChange={e => setSearchTerm(e.target.value)}
                                 />
                                 <Search className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
                             </div>
@@ -133,52 +178,59 @@ const DiseaseManagement = () => {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {diseaseData.map((disease, index) => (
-                                    <tr key={disease.id} className="hover:bg-gray-50 transition-colors duration-150">
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            {index + 1}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm font-medium text-gray-900">
-                                                {disease.name}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm text-gray-600 italic">
-                                                {disease.scientificName}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="text-sm text-gray-600 max-w-xs">
-                                                {disease.symptoms}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getSeverityColor(disease.severity)}`}>
-                                                {disease.severity}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="text-sm text-gray-600 max-w-xs">
-                                                {disease.treatment}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <Link to={`/dashboard/disease-management/${disease.id}`} className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 flex items-center gap-1">
-                                                <Eye className="w-4 h-4" />
-                                                Detail
-                                            </Link>
+                                {filteredData.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="7" className="px-6 py-4 text-center text-gray-500">
+                                            Data penyakit tidak ditemukan.
                                         </td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    filteredData.map((disease, index) => (
+                                        <tr key={disease.id} className="hover:bg-gray-50 transition-colors duration-150">
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                {index + 1}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <div className="text-sm font-medium text-gray-900">
+                                                    {disease.name}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <div className="text-sm text-gray-600 italic">
+                                                    {disease.scientificName}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-sm text-gray-600 max-w-xs">
+                                                    {disease.symptoms}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getSeverityColor(disease.severity)}`}>
+                                                    {disease.severity}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-sm text-gray-600 max-w-xs">
+                                                    {disease.treatment}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <Link to={`/dashboard/disease-management/${disease.id}`} className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 flex items-center gap-1">
+                                                    <Eye className="w-4 h-4" />
+                                                    Detail
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
                     </div>
                 </section>
             </main>
         </div>
-
     )
 }
 
-export default DiseaseManagement
+export default DiseaseManagement;
