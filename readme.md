@@ -192,18 +192,27 @@ Proyek ini dilisensikan di bawah **MIT License** - lihat file [LICENSE](LICENSE)
 
 ## 👥 **Tim Pengembang**
 
-- **Lead Developer**: [Nama Anda]
-- **ML Engineer**: [Nama Tim ML]
-- **Frontend Developer**: [Nama Frontend Dev]
-- **Data Scientist**: [Nama Data Scientist]
+### 🚀 **Machine Learning Engineers**
+- **Luigi** - ML Specialist | 📧 luigiifandwitomo@gmail.com
+- **Sion Pardosi** - Deep Learning Expert | 🔗 [GitHub](https://github.com/sionpardosi/)
+- **Irene** - Data Processing & Model Optimization | 🔗 [GitHub](https://github.com/irene464117)
+
+### 💻 **Full-Stack Developers**
+- **Alif Firman** - Frontend & Backend Integration | 🔗 [GitHub](https://github.com/aliffirmansh)
+- **Azel** - UI/UX & Frontend Development | 🔗 [GitHub](https://github.com/azaliafd)
+- **Rafi** - Backend Architecture & API Development | 🔗 [GitHub](https://github.com/Apchier)
+
+### 🎯 **Project Leadership**
+- **Tim Kolaboratif** - Pengembangan bersama dengan pendekatan agile dan iteratif
 
 ---
 
 ## 📞 **Kontak**
 
-- **Email**: jagungsehat@example.com
-- **LinkedIn**: [LinkedIn Profile]
-- **Website**: [Project Website]
+- **Email**: 📧 Coming Soon
+- **LinkedIn**: 💼 Coming Soon  
+- **Website**: 🌐 Coming Soon
+- **GitHub Organization**: 🔗 [Jagung Sehat Repository](https://github.com/jagung-sehat)
 
 ---
 
