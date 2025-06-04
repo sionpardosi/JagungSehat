@@ -193,14 +193,14 @@ Proyek ini dilisensikan di bawah **MIT License** - lihat file [LICENSE](LICENSE)
 ## 👥 **Tim Pengembang**
 
 ### 🚀 **Machine Learning Engineers**
+- **Sion Pardosi** - ML Specialist | 🔗 [GitHub](https://github.com/sionpardosi/)
 - **Luigi** - ML Specialist | 📧 luigiifandwitomo@gmail.com
-- **Sion Pardosi** - Deep Learning Expert | 🔗 [GitHub](https://github.com/sionpardosi/)
-- **Irene** - Data Processing & Model Optimization | 🔗 [GitHub](https://github.com/irene464117)
+- **Irene** - ML Specialist | 🔗 [GitHub](https://github.com/irene464117)
 
 ### 💻 **Full-Stack Developers**
-- **Alif Firman** - Frontend & Backend Integration | 🔗 [GitHub](https://github.com/aliffirmansh)
-- **Azel** - UI/UX & Frontend Development | 🔗 [GitHub](https://github.com/azaliafd)
-- **Rafi** - Backend Architecture & API Development | 🔗 [GitHub](https://github.com/Apchier)
+- **Alif Firman** - Frontend & Backend Developer | 🔗 [GitHub](https://github.com/aliffirmansh)
+- **Azel** - Frontend & Backend Developer | 🔗 [GitHub](https://github.com/azaliafd)
+- **Rafi** - Frontend & Backend Developer | 🔗 [GitHub](https://github.com/Apchier)
 
 ### 🎯 **Project Leadership**
 - **Tim Kolaboratif** - Pengembangan bersama dengan pendekatan agile dan iteratif
