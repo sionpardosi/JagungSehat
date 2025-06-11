@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Disease {
+  id                  Int                  @id @default(autoincrement())
+  name                String               @unique @db.VarChar(50) 
+  title               String               @db.VarChar(100)
+  description         String?
+  symptoms            String?
+  treatment           String?
+  createdAt           DateTime             @default(now()) @map("created_at")
+  updatedAt           DateTime?            @map("updated_at")
+  cornReferenceImages CornReferenceImage[]
+  scanHistory         ScanHistory[]        @relation("DiseaseScanHistory")
+
+  @@map("diseases")
+}
+
+model User {
+  id          String        @id @default(cuid())
+  username    String        @unique @db.VarChar(50)
+  email       String        @unique @db.VarChar(100)
+  password    String        @db.VarChar(255)
+  role        UserRole      @default(USER)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime?     @map("updated_at")
+  scanHistory ScanHistory[]
+
+  @@map("users")
+}
+
+model CornReferenceImage {
+  id             Int      @id @default(autoincrement())
+  diseaseId      Int      @map("disease_id")
+  imagePath      String   @map("image_path") @db.VarChar(255)
+  imageName      String   @map("image_name") @db.VarChar(100)
+  isTrainingData Boolean  @default(true) @map("is_training_data")
+  createdAt      DateTime @default(now()) @map("created_at")
+  disease        Disease  @relation(fields: [diseaseId], references: [id])
+
+  @@map("corn_reference_images")
+}
+
+model ScanHistory {
+  id         Int      @id @default(autoincrement())
+  userId     String?  @map("user_id")
+  diseaseId  Int      @map("disease_id")
+  scanDate   DateTime @default(now()) @map("scan_date")
+  imagePath  String?  @map("image_path") @db.VarChar(255)
+  result     String?  @map("result") @db.VarChar(255)
+  confidence Float?
+  user       User?    @relation(fields: [userId], references: [id])
+  disease    Disease  @relation(fields: [diseaseId], references: [id], name: "DiseaseScanHistory")
+
+  @@map("scan_history")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
