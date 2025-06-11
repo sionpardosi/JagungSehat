@@ -1,6 +1,7 @@
 const prisma = require('../config/database');
 const { sendSuccess, sendError } = require('../utils/response');
 const { predictDisease } = require('../services/mlService');
+const { addImage } = require('../services/storageService');
 const fs = require('fs').promises;
 
 const scanImage = async (req, res, next) => {
@@ -9,7 +10,9 @@ const scanImage = async (req, res, next) => {
             return sendError(res, 'Image file is required', 400);
         }
 
-        const prediction = await predictDisease(req.file.path);
+        const imagePath = await addImage(req.file)
+
+        const prediction = await predictDisease(imagePath);
 
         console.log('Prediction result:', prediction);
 
@@ -55,7 +58,7 @@ const scanImage = async (req, res, next) => {
             diseaseId: prediction.diseaseId,
             diseaseName: prediction.diseaseName,
             confidence: prediction.confidence,
-            imagePath: req.file.path,
+            imagePath,
             timestamp: new Date()  
         };
 
@@ -65,7 +68,7 @@ const scanImage = async (req, res, next) => {
                     data: {
                         userId: req.user.id,
                         diseaseId: prediction.diseaseId,
-                        imagePath: req.file.path,
+                        imagePath,
                         result: JSON.stringify(result),
                         confidence: prediction.confidence
                     },
