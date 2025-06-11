@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Crosshair } from 'lucide-react';
-import CornField from "../../assets/image/corn-field.jpg";
+import CornField from "../../../public/assets/image/corn-field.jpg";
 
 export const Header = ({
     data = {
@@ -36,7 +36,7 @@ export const Header = ({
 
                         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                             <a
-                                href="#about"
+                                href="#guide"
                                 className="bg-green-600 text-white px-6 py-3 md:px-8 md:py-4 rounded-lg font-semibold
                                 hover:bg-white hover:text-green-600 transition-all duration-300 
                                 shadow-lg hover:shadow-xl flex items-center justify-center gap-2

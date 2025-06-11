@@ -1,5 +1,4 @@
-import Leaves from "../../assets/image/corn-leaves.png";
-import { Eye } from "lucide-react";
+import Leaves from "../../../public/assets/image/corn-leaves.png";
 
 const DiseaseInfo = () => {
   const diseaseList = [
@@ -50,7 +49,7 @@ const DiseaseInfo = () => {
   ];
 
   return (
-    <section id="disease-info" className="py-16 bg-gray-50">
+    <section id="disease-info" className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-primary-600 mb-4 text-green-secondary">Informasi Penyakit Daun Jagung</h2>

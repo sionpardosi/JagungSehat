@@ -1,133 +1,119 @@
-import { Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import { Menu, X } from 'lucide-react'
-import Logo from '../../assets/image/logo.png'
-import NavButton from '../ui/NavDekstopButton'
-import NavMobileButton from '../ui/NavMobileButton'
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'; // <--- Import useNavigate
+import Logo from '../../../public/assets/image/logo.png';
+import NavButton from '../ui/NavDekstopButton';
+import NavMobileButton from '../ui/NavMobileButton';
 
 export const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false)
-    const [isScrolled, setIsScrolled] = useState(false)
-    const [activeLink, setActiveLink] = useState('#header')
+    const [isOpen, setIsOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [activeLink, setActiveLink] = useState('#header');
+    const [isLoggedIn, setIsLoggedIn] = useState(false); 
+    const navigate = useNavigate(); // <--- Initialize useNavigate
 
+    // Updated navItems
     const navItems = [
         { href: '#header', label: 'Beranda' },
         { href: '#about', label: 'Tentang' },
-        { href: '#panduan', label: 'Panduan' },
-        { href: '#services', label: 'Layanan' },
+        { href: '#guide', label: 'Panduan' },
         { href: '#disease-info', label: 'Informasi Penyakit' },
         { href: '#contact', label: 'Kontak' },
-        { href: '/detection', label: 'Deteksi' }
-    ]
+        { href: '/detection', label: 'Deteksi' },
+        ...(isLoggedIn ? [{ href: '/history', label: 'Riwayat Deteksi' }] : []), 
+    ];
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50)
-        }
+            setIsScrolled(window.scrollY > 50);
+        };
 
-        window.addEventListener('scroll', handleScroll)
+        window.addEventListener('scroll', handleScroll);
 
         return () => {
-            window.removeEventListener('scroll', handleScroll)
-        }
-    }, [])
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     useEffect(() => {
-        const observerOptions = {
-            root: null,
-            rootMargin: '-20% 0px -80% 0px',
-            threshold: 0
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            setIsLoggedIn(true); 
         }
+    }, []);
 
-        const observerCallback = (entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const sectionId = `#${entry.target.id}`
-                    setActiveLink(sectionId)
-                }
-            })
-        }
-
-        const observer = new IntersectionObserver(observerCallback, observerOptions)
-
-        const sections = ['header', 'about', 'panduan', 'services', 'disease-info', 'contact']
-        sections.forEach(id => {
-            const element = document.getElementById(id)
-            if (element) observer.observe(element)
-        })
-
-        return () => observer.disconnect()
-    }, [])
+    const handleLogout = () => {
+        localStorage.removeItem('authToken'); 
+        setIsLoggedIn(false); 
+        navigate('/auth/login'); // <--- Navigate to login page after logout
+    };
 
     const toggleMenu = () => {
-        setIsOpen(!isOpen)
-    }
+        setIsOpen(!isOpen);
+    };
 
     const handleNavLinkClick = (href) => {
-        setActiveLink(href)
-        setIsOpen(false)
+        setActiveLink(href);
+        setIsOpen(false);
 
         if (href.startsWith('#')) {
             setTimeout(() => {
-                const element = document.getElementById(href.substring(1))
+                const element = document.getElementById(href.substring(1));
                 if (element) {
                     element.scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
-                    })
+                    });
                 }
-            }, 100)
+            }, 100);
         }
-    }
+    };
 
     const handleLogoClick = (e) => {
-        e.preventDefault()
-        setActiveLink('#header')
-        setIsOpen(false)
-
+        e.preventDefault();
+        setActiveLink('#header');
+        setIsOpen(false);
 
         if (window.location.pathname === '/') {
-
-            const headerElement = document.getElementById('header')
+            const headerElement = document.getElementById('header');
             if (headerElement) {
                 headerElement.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
-                })
+                });
             } else {
-
-                window.scrollTo({ top: 0, behavior: 'smooth' })
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         } else {
-
-            window.location.href = '/#header'
+            window.location.href = '/#header';
         }
-    }
+    };
 
     useEffect(() => {
         if (isOpen) {
-            document.body.style.overflow = 'hidden'
+            document.body.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow = 'auto'
+            document.body.style.overflow = 'auto';
         }
 
         return () => {
-            document.body.style.overflow = 'auto'
-        }
-    }, [isOpen])
+            document.body.style.overflow = 'auto';
+        };
+    }, [isOpen]);
 
     useEffect(() => {
         const handleScrollClose = () => {
             if (isOpen) {
-                setIsOpen(false)
+                setIsOpen(false);
             }
-        }
+        };
 
         if (isOpen) {
-            window.addEventListener('scroll', handleScrollClose)
-            return () => window.removeEventListener('scroll', handleScrollClose)
+            window.addEventListener('scroll', handleScrollClose);
+            return () => window.removeEventListener('scroll', handleScrollClose);
         }
-    }, [isOpen])
+    }, [isOpen]);
 
     return (
         <nav
@@ -151,7 +137,7 @@ export const Navbar = () => {
                         ${isScrolled
                             ? 'text-green-primary'
                             : 'text-white drop-shadow-md'}`}>
-                        Corn Leaves
+                        JAGAT
                     </span>
                 </a>
 
@@ -167,15 +153,27 @@ export const Navbar = () => {
                         />
                     ))}
 
-                    <Link
-                        to="/auth/login"
-                        className={`px-4 py-2 rounded-lg transition-colors duration-300  
-                            ${isScrolled
-                                ? 'bg-green-tertiary text-white hover:bg-green-primary'
-                                : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm'}`}
-                    >
-                        Login
-                    </Link>
+                    {isLoggedIn ? (
+                        <button
+                            onClick={handleLogout}
+                            className={`px-4 py-2 rounded-lg transition-colors duration-300  
+                                ${isScrolled
+                                    ? 'bg-green-tertiary text-white hover:bg-green-primary'
+                                    : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm'}`}
+                        >
+                            Logout
+                        </button>
+                    ) : (
+                        <Link
+                            to="/auth/login"
+                            className={`px-4 py-2 rounded-lg transition-colors duration-300  
+                                ${isScrolled
+                                    ? 'bg-green-tertiary text-white hover:bg-green-primary'
+                                    : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm'}`}
+                        >
+                            Login
+                        </Link>
+                    )}
                 </div>
 
                 {/* Mobile Menu Toggle */}
@@ -193,9 +191,7 @@ export const Navbar = () => {
 
                 {/* Mobile Menu */}
                 {isOpen && (
-                    <div
-                        className="fixed inset-0 z-50 md:hidden"
-                    >
+                    <div className="fixed inset-0 z-50 md:hidden">
                         {/* Backdrop */}
                         <div
                             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -240,24 +236,35 @@ export const Navbar = () => {
                                 ))}
                             </div>
 
-                            {/* Login Button */}
+                            {/* Conditional Rendering in Mobile Menu */}
                             <div className="absolute bottom-0 left-0 right-0 p-6 bg-gray-50 border-t border-gray-100">
-                                <Link
-                                    to={"/auth/login"}
-                                    onClick={() => setIsOpen(false)}
-                                    className="flex items-center justify-center w-full py-3 px-4   
-                                    bg-green-primary text-white font-medium rounded-lg hover:bg-green-tertiary 
-                                    transition-colors duration-200 shadow-md"
-                                >
-                                    Login
-                                </Link>
+                                {isLoggedIn ? (
+                                    <button
+                                        onClick={handleLogout}
+                                        className="flex items-center justify-center w-full py-3 px-4  
+                                            bg-green-primary text-white font-medium rounded-lg hover:bg-green-tertiary 
+                                            transition-colors duration-200 shadow-md"
+                                    >
+                                        Logout
+                                    </button>
+                                ) : (
+                                    <Link
+                                        to="/auth/login"
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center justify-center w-full py-3 px-4   
+                                            bg-green-primary text-white font-medium rounded-lg hover:bg-green-tertiary 
+                                            transition-colors duration-200 shadow-md"
+                                    >
+                                        Login
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </div>
                 )}
             </div>          
         </nav>
-    )
+    );
 }
 
-export default Navbar
+export default Navbar;
