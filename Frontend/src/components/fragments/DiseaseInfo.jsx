@@ -60,10 +60,10 @@ const DiseaseInfo = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-primary-600 mb-4 text-green-secondary">
-            Informasi Penyakit Daun Jagung
+            Informasi Daun Jagung
           </h2>
           <p className="text-secondary-600 max-w-2xl mx-auto text-lg">
-            Kenali jenis-jenis penyakit pada daun jagung agar dapat melakukan pencegahan dan penanganan lebih dini.
+            Kenali jenis-jenis daun jagung agar dapat melakukan pencegahan dan penanganan lebih dini.
           </p>
         </div>
 

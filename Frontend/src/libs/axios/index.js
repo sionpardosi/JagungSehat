@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
     baseURL: 'https://jagungsehat-production.up.railway.app/api', 
-    timeout: 10000, 
+    timeout: 15000, 
 });
 
 
