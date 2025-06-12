@@ -62,6 +62,16 @@ const DetectionPage = () => {
             };
             reader.readAsDataURL(file);
         }
+        const MAX_SIZE_MB = 5;
+if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+  alert('Ukuran gambar terlalu besar. Maksimal 5MB.');
+  return;
+}
+if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+  alert('Format gambar tidak didukung.');
+  return;
+}
+
     };
 
     // Handle drag and drop  
@@ -83,6 +93,17 @@ const DetectionPage = () => {
             };
             reader.readAsDataURL(file);
         }
+
+        const MAX_SIZE_MB = 5;
+if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+  alert('Ukuran gambar terlalu besar. Maksimal 5MB.');
+  return;
+}
+if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+  alert('Format gambar tidak didukung.');
+  return;
+}
+
     };
 
     // Start camera capture  
@@ -138,6 +159,13 @@ const DetectionPage = () => {
             tracks.forEach(track => track.stop());
         }
         setCaptureMode(false);
+
+        if (videoRef.current?.srcObject) {
+            const tracks = videoRef.current.srcObject.getTracks();
+            tracks.forEach(track => track.stop());
+            videoRef.current.srcObject = null;
+          }
+          
     };
 
     // Reset image selection  
@@ -155,20 +183,23 @@ const DetectionPage = () => {
     const detectDisease = async (image) => {
         const formData = new FormData();
         formData.append('image', image);
-
+    
         try {
-            const response = await axiosInstance.post('/detect', formData);
-            return response.data; // Should include fields like 'diseaseName'
+            const response = await axiosInstance.post('/scan', formData);
+            console.log('Deteksi berhasil:', response.data);
+            return response.data;
         } catch (error) {
-            console.error('Error during disease detection:', error.response ? error.response.data : error);
+            console.error('Deteksi gagal:', error.response?.data || error.message);
             const errorMessage =
                 (error.response && error.response.data && error.response.data.message) ||
                 'Terjadi kesalahan saat mendeteksi penyakit. Silakan coba lagi.';
             return { errorMessage };
         }
     };
+    
 
     // Handle scan
+    const [result, setResult] = useState(null);
     const handleScan = async () => {
         if (!selectedImage) {
             alert('Silakan pilih atau ambil gambar terlebih dahulu.');
@@ -176,22 +207,24 @@ const DetectionPage = () => {
         }
 
         const formData = new FormData();
+        console.log('Tipe selectedImage:', selectedImage?.type);
+console.log('Apakah instance of Blob:', selectedImage instanceof Blob);
+console.log('Ukuran gambar:', selectedImage?.size);
+
         formData.append('image', selectedImage);
 
         try {
             const response = await axiosInstance.post('/scan', formData);
             alert('Scan berhasil disimpan!');
             console.log('Hasil scan:', response.data);
+            setDetectionResult(response.data.data);
         } catch (error) {
-            console.error('Error saat melakukan scan:', error.response ? error.response.data : error);
+            console.error('FULL ERROR:', error);
+        
             if (error.response) {
-                if (error.response.status === 401) {
-                    alert('Anda harus login untuk menyimpan hasil scan.');
-                } else if (error.response.data.message) {
-                    alert(error.response.data.message);
-                } else {
-                    alert('Terjadi kesalahan saat melakukan scan. Silakan coba lagi.');
-                }
+                console.error('RESPONSE DATA:', error.response.data);
+                console.error('RESPONSE STATUS:', error.response.status);
+                console.error('RESPONSE HEADERS:', error.response.headers);
             } else {
                 alert('Terjadi kesalahan koneksi. Silakan coba lagi.');
             }
@@ -200,7 +233,6 @@ const DetectionPage = () => {
 
     // Handle take picture button click
     const handleTakePicture = () => {
-        startCapture();
         navigate('/detection/take-picture');
     };
 

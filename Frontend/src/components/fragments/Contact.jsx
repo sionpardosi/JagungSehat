@@ -43,12 +43,12 @@ const Contact = () => {
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
                 <MapPin className="w-6 h-6 text-green-600" />
-                <span>Jl. Jagung Sehat No. 123, Bandung</span>
+                <span>Bandung</span>
               </div>
 
               <div className="flex items-center space-x-4">
                 <Mail className="w-6 h-6 text-green-600" />
-                <span>kontak@deteksijagung.com</span>
+                <span>capestonejagung@gmail.com</span>
               </div>
 
               <div className="flex items-center space-x-4">
