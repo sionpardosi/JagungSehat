@@ -19,7 +19,6 @@ export const Navbar = () => {
         { href: '#about', label: 'Tentang' },
         { href: '#guide', label: 'Panduan' },
         { href: '#disease-info', label: 'Informasi Penyakit' },
-        { href: '#contact', label: 'Kontak' },
         { href: '/detection', label: 'Deteksi' },
         ...(isLoggedIn ? [{ href: '/history', label: 'Riwayat Deteksi' }] : []), 
     ];

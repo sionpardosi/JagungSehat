@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { CheckCircle, AlertTriangle, Search } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion"; // eslint-disable-line
+import { CheckCircle, AlertTriangle, Search, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // Tambahan
+import { motion, AnimatePresence } from "framer-motion";
 import useHistories from "../../hook/history/useHistories";
 import useGetUsers from "../../hook/user/useGetUsers";
 
@@ -10,6 +11,12 @@ const HistoryPage = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [filterStatus, setFilterStatus] = useState("all");
+
+    const navigate = useNavigate(); // Tambahan
+
+    const handleGoBack = () => {
+        navigate(-1); // Tombol kembali
+    };
 
     const toggleDetails = (itemId) => {
         setSelectedItem((prev) => (prev === itemId ? null : itemId));
@@ -23,14 +30,12 @@ const HistoryPage = () => {
     const filteredData = Array.isArray(histories)
         ? histories.filter((item) => {
             const matchesSearch = item.disease?.title.toLowerCase().includes(searchQuery.toLowerCase());
-
             const matchesStatus =
                 filterStatus === "all"
                     ? true
                     : filterStatus === "healthy"
                         ? item.diseaseId === 1
                         : item.diseaseId !== 1;
-
             return matchesSearch && matchesStatus;
         })
         : [];
@@ -45,10 +50,21 @@ const HistoryPage = () => {
     return (
         <div className="bg-gradient-to-b from-green-100 to-green-200 min-h-screen p-6">
             <div className="max-w-7xl mx-auto bg-white shadow-lg rounded-lg p-6">
+                {/* Tombol Kembali */}
+                <header className="flex items-center justify-between mb-6">
+                    <button
+                        onClick={handleGoBack}
+                        className="flex items-center space-x-2 text-green-600 hover:text-green-700 transition-colors"
+                    >
+                        <ArrowLeft size={24} />
+                        <span className="font-medium">Kembali</span>
+                    </button>
+                </header>
+
                 <h2 className="text-3xl font-bold text-[#1b4332] mb-6 text-center">
                     Detection History
                 </h2>
-
+                
                 {error && <p className="text-red-500 text-center">{error}</p>}
                 {loading && <p className="text-center">Loading...</p>}
                 {loadingUsers && <p className="text-center">Loading Users...</p>}

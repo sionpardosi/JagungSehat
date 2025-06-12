@@ -4,7 +4,6 @@ import Header from "../../components/fragments/Header"
 import Guide from "../../components/fragments/Guide"
 import About from "../../components/fragments/About"
 import DiseaseInfo from '../../components/fragments/DiseaseInfo'
-import Contact from '../../components/fragments/Contact'
 import "../../App.css"
 
 export default function HomePage() {
@@ -26,7 +25,6 @@ export default function HomePage() {
 
             <DiseaseInfo id="disease-info" />
 
-            <Contact id="contact" />
         </main>
     )
 }

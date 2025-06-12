@@ -1,24 +1,55 @@
-import Logo from '../../../public/assets/image/logo.png'
 import { Link } from 'react-router-dom'
+import { Github } from "lucide-react";
+import Logo from '../../../public/assets/image/logo.png'
 
 const Footer = () => {
     return (
-        <footer className="bg-green-600 text-white py-6 shadow-inner shadow-black/20">
-            <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+        <footer className="bg-green-600 text-white pt-10 pb-6 shadow-inner shadow-black/20">
+            <div className="container mx-auto px-4 space-y-8">
 
-                <div className="flex items-center gap-2">
-                    <img src={Logo} alt="Logo" className="h-8 w-8 drop-shadow-md" />
-                    <span className="text-lg font-semibold drop-shadow-sm">JAGAT</span>
+                {/* Grid 3 Kolom */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm text-white/90">
+
+                    {/* Kiri - Logo & Slogan */}
+                    <div className="flex flex-col items-start">
+                        <div className="flex items-center gap-3 mb-2">
+                            <img src={Logo} alt="Logo" className="h-10 w-10 drop-shadow-md" />
+                            <span className="text-xl font-bold drop-shadow-sm">JAGAT</span>
+                        </div>
+                        <p className="max-w-sm">Temukan dan lestarikan kekayaan tanaman jagung Indonesia lewat teknologi.</p>
+                    </div>
+
+                    {/* Tengah - Kontak */}
+                    <div className="flex flex-col items-center text-center">
+                        <p className="font-semibold mb-1">Kontak Kami</p>
+                        <p>Email: <a href="mailto:jagat@email.com" className="hover:underline">jagat@email.com</a></p>
+                        <p>Telepon: <a href="tel:+6281234567890" className="hover:underline">+62 812-3456-7890</a></p>
+                    </div>
+
+                    {/* Kanan - Ikuti Kami */}
+                    <div className="flex flex-col items-end md:items-center">
+                        <p className="font-semibold mb-1">Ikuti kami</p>
+                        <a
+                            href="https://github.com/sionpardosi/JagungSehat.git"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-white hover:text-white/80 mt-1"
+                        >
+                            <Github size={22} />
+                        </a>
+                    </div>
                 </div>
 
-                <div className="text-sm text-white/80 text-center md:text-left drop-shadow-sm">
-                    © 2025 Corn Leaves. All Rights Reserved.
-                </div>
+                {/* Garis Pemisah */}
+                <div className="border-t border-white/30"></div>
 
-                <div className="flex gap-4 text-sm text-white/90">
+                {/* Bagian Bawah */}
+                <div className="text-center text-sm text-white/80 space-x-4">
                     <Link to="/terms" className="hover:underline">Terms & Conditions</Link>
                     <Link to="/privacy" className="hover:underline">Privacy Policy</Link>
+                    <span>© 2025 Corn Leaves. All Rights Reserved.</span>
                 </div>
+
             </div>
         </footer>
     )
