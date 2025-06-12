@@ -15,8 +15,6 @@ import HistoryPage from './pages/history/HistoryPage';
 import DiseaseManagement from "./pages/dashboard/DiseaseManagement";
 import DashboardPage from "./pages/dashboard/DashboardPage";
 import UserManagement from "./pages/dashboard/UserManagement";
-import DiseaseDetail from "./components/dashboard/DiseaseDetail";
-import UserDetail from "./components/dashboard/UserDetail";
 
 export const router = createBrowserRouter([
   {
@@ -60,22 +58,10 @@ export const router = createBrowserRouter([
       {
         path: "disease-management",
         element: <DiseaseManagement />,
-        children: [
-          {
-            path: ":id",
-            element: <DiseaseDetail />,
-          },
-        ],
       },
       {
         path: "user-management",
         element: <UserManagement />,
-        children: [
-          {
-            path: ":id",
-            element: <UserDetail />,
-          },
-        ]
       },
     ],
   },
