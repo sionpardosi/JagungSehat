@@ -23,7 +23,6 @@ const DetectionPage = () => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
 
-    // Fetch diseases from the API
     useEffect(() => {
         const fetchDiseases = async () => {
             try {
@@ -200,8 +199,7 @@ const DetectionPage = () => {
     };
 
     const handleDetection = async () => {
-        // Check if the user is logged in (mock-up example)
-        const userIsLoggedIn = true; // Replace this with your actual authentication logic
+        const userIsLoggedIn = true; 
 
         if (!userIsLoggedIn) {
             setErrorMessage('Anda harus login untuk melakukan deteksi.');
@@ -230,7 +228,6 @@ const DetectionPage = () => {
         try {
             const result = await detectDisease(selectedImage);
 
-            // Handle unreliable prediction
             if (result.errorType === 'unreliable') {
                 setDetectionResult({
                     id: 'unreliable',
@@ -328,9 +325,6 @@ const DetectionPage = () => {
 
                     setDetectionResult(transformedResult);
                     setSuccessMessage(`Deteksi berhasil! Penyakit "${diseaseInfo.title}" teridentifikasi dengan tingkat kepercayaan ${Math.round(confidence * 100)}%.`);
-
-                    // Any logic to save the image to Supabase should go here
-                    // Example: await uploadImageToSupabase(selectedImage);
 
                 } else {
                     // Fallback for undefined disease data

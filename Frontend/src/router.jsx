@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom"; 
 
 import MainLayout from "./components/layouts/MainLayout";
 import DetectionLayout from "./components/layouts/DetectionLayout";
@@ -13,8 +13,8 @@ import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import HistoryPage from './pages/history/HistoryPage';
 import DiseaseManagement from "./pages/dashboard/DiseaseManagement";
-import DashboardPage from "./pages/dashboard/DashboardPage";
 import UserManagement from "./pages/dashboard/UserManagement";
+import PredictHistory from "./pages/dashboard/PredictHistory";
 
 export const router = createBrowserRouter([
   {
@@ -38,22 +38,22 @@ export const router = createBrowserRouter([
     ],
   },
   {
-  path: "/detection/take-picture",
-  element: <CameraLayout />,
-  children: [
-    {
-      index: true,
-      element: <TakePicture />,
-    },
-  ],
-},
+    path: "/detection/take-picture",
+    element: <CameraLayout />,
+    children: [
+      {
+        index: true,
+        element: <TakePicture />,
+      },
+    ],
+  },
   {
     path: "/dashboard",
     element: <DashboardLayout />,
     children: [
       {
         index: true,
-        element: <DashboardPage />,
+        element: <Navigate to="/dashboard/disease-management" />, 
       },
       {
         path: "disease-management",
@@ -62,6 +62,10 @@ export const router = createBrowserRouter([
       {
         path: "user-management",
         element: <UserManagement />,
+      },
+      {
+        path: "predict-history",
+        element: <PredictHistory />,
       },
     ],
   },

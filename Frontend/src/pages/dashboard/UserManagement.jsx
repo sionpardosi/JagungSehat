@@ -10,10 +10,19 @@ const UserManagement = () => {
     const { deleteUser } = useDeleteUser();
     const [searchQuery, setSearchQuery] = useState('');
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+
     const filteredUsers = users.filter(user =>
         user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const indexOfLastUser = currentPage * itemsPerPage;
+    const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const exportToCSV = () => {
         const headers = ['ID', 'Name', 'Email', 'Role'];
@@ -78,6 +87,8 @@ const UserManagement = () => {
         }
     };
 
+    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
     return (
         <div className="flex h-screen bg-gray-100 font-sans text-gray-900">
             <Sidebar />
@@ -99,7 +110,7 @@ const UserManagement = () => {
                         <div className="relative">
                             <input
                                 type="text"
-                                placeholder="Cari user..."
+                                placeholder="Search user..."
                                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -131,14 +142,14 @@ const UserManagement = () => {
                                     <tr>
                                         <td colSpan="5" className="px-6 py-4 text-center text-red-500">Error: {error}</td>
                                     </tr>
-                                ) : filteredUsers.length === 0 ? (
+                                ) : currentUsers.length === 0 ? (
                                     <tr>
                                         <td colSpan="5" className="px-6 py-4 text-center text-gray-500">Data pengguna tidak ditemukan.</td>
                                     </tr>
                                 ) : (
-                                    filteredUsers.map((user, index) => (
+                                    currentUsers.map((user, index) => (
                                         <tr key={user.id} className="hover:bg-gray-50 transition-colors duration-150">
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1 + indexOfFirstUser}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <div className="text-sm font-medium text-gray-900">{user.name}</div>
                                             </td>
@@ -166,6 +177,24 @@ const UserManagement = () => {
                         </table>
                     </div>
                 </section>
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                    <nav className="flex justify-center">
+                        <ul className="inline-flex items-center -space-x-px">
+                            {[...Array(totalPages)].map((_, index) => (
+                                <li key={index}>
+                                    <button
+                                        onClick={() => paginate(index + 1)}
+                                        className={`px-3 py-1 border border-gray-300 rounded-md ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100'}`}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                )}
             </main>
         </div>
     );

@@ -24,7 +24,6 @@ export default function HomePage() {
             <Guide id="guide" />
 
             <DiseaseInfo id="disease-info" />
-
         </main>
     )
 }

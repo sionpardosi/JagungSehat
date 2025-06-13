@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom'
-import { Github } from "lucide-react";
+import { Github } from 'lucide-react';
 import Logo from '../../../public/assets/image/logo.png'
 
 const Footer = () => {
@@ -45,11 +44,10 @@ const Footer = () => {
 
                 {/* Bagian Bawah */}
                 <div className="text-center text-sm text-white/80 space-x-4">
-                    <Link to="/terms" className="hover:underline">Terms & Conditions</Link>
-                    <Link to="/privacy" className="hover:underline">Privacy Policy</Link>
+                    <span className="hover:underline">Terms & Conditions</span>
+                    <span className="hover:underline">Privacy Policy</span>
                     <span>© 2025 Corn Leaves. All Rights Reserved.</span>
                 </div>
-
             </div>
         </footer>
     )

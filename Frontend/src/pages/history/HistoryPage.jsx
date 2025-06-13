@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CheckCircle, AlertTriangle, Search, ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom"; // Tambahan
-import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom"; 
+import { motion, AnimatePresence } from "framer-motion"; // eslint-disable-line no-unused-vars
 import useHistories from "../../hook/history/useHistories";
 import useGetUsers from "../../hook/user/useGetUsers";
 
@@ -12,10 +12,10 @@ const HistoryPage = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [filterStatus, setFilterStatus] = useState("all");
 
-    const navigate = useNavigate(); // Tambahan
+    const navigate = useNavigate(); 
 
     const handleGoBack = () => {
-        navigate(-1); // Tombol kembali
+        navigate(-1); 
     };
 
     const toggleDetails = (itemId) => {

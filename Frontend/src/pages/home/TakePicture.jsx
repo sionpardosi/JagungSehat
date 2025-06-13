@@ -48,7 +48,7 @@ const TakePicture = () => {
                 stream.getTracks().forEach((track) => track.stop());
             }
         };
-    }, []); 
+    }, [stream]); 
 
     const handleCapture = () => {
         if (!videoRef.current || !canvasRef.current) return;

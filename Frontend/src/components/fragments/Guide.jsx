@@ -23,7 +23,7 @@ const Guide = () => {
             icon: <Search className="w-7 h-7 text-green-600" />,
             title: 'Proses Analisis',
             description: 'AI akan menganalisis gambar menggunakan teknologi CNN.',
-            tips: 'Proses analisis membutuhkan waktu 2-5 detik'
+            tips: 'Proses analisis membutuhkan waktu 5-8 detik'
         },
         {
             step: '04',
