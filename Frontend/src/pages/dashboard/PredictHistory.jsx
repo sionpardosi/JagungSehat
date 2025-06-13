@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Trash, Download } from 'lucide-react';
 import Sidebar from '../../components/dashboard/Sidebar';
 import Swal from 'sweetalert2';
@@ -6,14 +6,15 @@ import axiosInstance from '../../libs/axios';
 import useAdminScanHistories from '../../hook/history/useAdminScanHistories';
 
 const PredictHistory = () => {
-    const { histories, loading, error } = useAdminScanHistories(); 
-    const [searchQuery, setSearchQuery] = useState('');
-    
-    // Pagination state
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const { histories: initialHistories, loading, error } = useAdminScanHistories();
 
-    // Filter histories based on search query
+    const [histories, setHistories] = useState(initialHistories);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    useEffect(() => {
+        setHistories(initialHistories);
+    }, [initialHistories]);
+
     const filteredHistories = histories.filter(history => {
         const username = history.user?.username ? history.user.username.toLowerCase() : '';
         const diseaseTitle = history.disease?.title ? history.disease.title.toLowerCase() : '';
@@ -23,19 +24,10 @@ const PredictHistory = () => {
         );
     });
 
-    // Calculate the current items to display based on pagination
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filteredHistories.slice(indexOfFirstItem, indexOfLastItem);
-
-    // Handle page change
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-    // Export to CSV functionality
     const exportToCSV = () => {
         const headers = ['No', 'Username', 'Email', 'Disease', 'Scan Date', 'Confidence', 'Image Path'];
-        const rows = currentItems.map((history, index) => [
-            index + 1 + indexOfFirstItem, 
+        const rows = filteredHistories.map((history, index) => [
+            index + 1,
             history.user?.username || "N/A",
             history.user?.email || "N/A",
             history.disease?.title || "N/A",
@@ -62,7 +54,7 @@ const PredictHistory = () => {
     };
 
     const deleteHistory = async (id) => {
-        await axiosInstance.delete(`admin/history/${id}`);
+        await axiosInstance.delete(`admin/scan-history/${id}`);
     };
 
     const handleDeleteHistory = async (id) => {
@@ -78,10 +70,11 @@ const PredictHistory = () => {
             if (result.isConfirmed) {
                 try {
                     await deleteHistory(id);
+                    setHistories(prevHistories => prevHistories.filter(history => history.id !== id));
                     Swal.fire({
                         title: "Deleted!",
                         text: "History item has been deleted.",
-                        icon: "success"
+                        icon: "success",
                     });
                 } catch (err) {
                     Swal.fire({
@@ -93,8 +86,6 @@ const PredictHistory = () => {
             }
         });
     };
-
-    const totalPages = Math.ceil(filteredHistories.length / itemsPerPage);
 
     return (
         <div className="flex h-screen bg-gray-100 font-sans text-gray-900">
@@ -148,14 +139,14 @@ const PredictHistory = () => {
                                     <tr>
                                         <td colSpan="8" className="px-6 py-4 text-center text-red-500">Error: {error}</td>
                                     </tr>
-                                ) : currentItems.length === 0 ? (
+                                ) : filteredHistories.length === 0 ? (
                                     <tr>
                                         <td colSpan="8" className="px-6 py-4 text-center text-gray-500">No history found.</td>
                                     </tr>
                                 ) : (
-                                    currentItems.map((history, index) => (
+                                    filteredHistories.map((history, index) => (
                                         <tr key={history.id} className="hover:bg-gray-50 transition-colors duration-150">
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1 + indexOfFirstItem}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <div className="text-sm font-medium text-gray-900">{history.user?.username}</div>
                                             </td>
@@ -174,7 +165,7 @@ const PredictHistory = () => {
                                             <td className="px-6 py-4 whitespace-nowrap text-center">
                                                 <img src={history.imagePath} alt="Scan Result" className="w-16 h-16 object-cover rounded" />
                                             </td>
-                                            <td className="px-6 flex gap-3 justify-center py-4 whitespace-nowrap text-sm font-medium">
+                                            <td className="px-6 flex justify-center items-center whitespace-nowrap text-sm font-medium">
                                                 <button
                                                     className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 flex items-center gap-1"
                                                     onClick={() => handleDeleteHistory(history.id)}
@@ -188,26 +179,9 @@ const PredictHistory = () => {
                                 )}
                             </tbody>
                         </table>
+
                     </div>
                 </section>
-
-                {/* Pagination Controls */}
-                {totalPages > 1 && (
-                    <nav className="flex justify-center">
-                        <ul className="inline-flex items-center -space-x-px">
-                            {[...Array(totalPages)].map((_, index) => (
-                                <li key={index}>
-                                    <button
-                                        onClick={() => paginate(index + 1)}
-                                        className={`px-3 py-1 border border-gray-300 rounded-md ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100'}`}
-                                    >
-                                        {index + 1}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    </nav>
-                )}
             </main>
         </div>
     );

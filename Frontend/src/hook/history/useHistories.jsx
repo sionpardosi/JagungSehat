@@ -11,9 +11,8 @@ const useHistories = () => {
             setLoading(true);
             try {
                 const response = await axiosInstance.get('/scan/history');
-                console.log(response.data); // Log the API response for debugging
+                console.log(response.data); 
 
-                // Check if response.data.data.scanHistory is an array
                 const scanHistory = response.data.data?.scanHistory;
                 if (Array.isArray(scanHistory)) {
                     setHistories(scanHistory);

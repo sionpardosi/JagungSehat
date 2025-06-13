@@ -10,19 +10,10 @@ const UserManagement = () => {
     const { deleteUser } = useDeleteUser();
     const [searchQuery, setSearchQuery] = useState('');
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
-
     const filteredUsers = users.filter(user =>
         user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
-    const indexOfLastUser = currentPage * itemsPerPage;
-    const indexOfFirstUser = indexOfLastUser - itemsPerPage;
-    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const exportToCSV = () => {
         const headers = ['ID', 'Name', 'Email', 'Role'];
@@ -68,7 +59,7 @@ const UserManagement = () => {
                 } catch (err) {
                     Swal.fire({
                         title: "Error!",
-                        text: err,
+                        text: err.message || "An error occurred.",
                         icon: "error"
                     });
                 }
@@ -86,8 +77,6 @@ const UserManagement = () => {
                 return 'bg-gray-500';
         }
     };
-
-    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
     return (
         <div className="flex h-screen bg-gray-100 font-sans text-gray-900">
@@ -142,14 +131,14 @@ const UserManagement = () => {
                                     <tr>
                                         <td colSpan="5" className="px-6 py-4 text-center text-red-500">Error: {error}</td>
                                     </tr>
-                                ) : currentUsers.length === 0 ? (
+                                ) : filteredUsers.length === 0 ? (
                                     <tr>
                                         <td colSpan="5" className="px-6 py-4 text-center text-gray-500">Data pengguna tidak ditemukan.</td>
                                     </tr>
                                 ) : (
-                                    currentUsers.map((user, index) => (
+                                    filteredUsers.map((user, index) => (
                                         <tr key={user.id} className="hover:bg-gray-50 transition-colors duration-150">
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1 + indexOfFirstUser}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <div className="text-sm font-medium text-gray-900">{user.name}</div>
                                             </td>
@@ -177,24 +166,6 @@ const UserManagement = () => {
                         </table>
                     </div>
                 </section>
-
-                {/* Pagination Controls */}
-                {totalPages > 1 && (
-                    <nav className="flex justify-center">
-                        <ul className="inline-flex items-center -space-x-px">
-                            {[...Array(totalPages)].map((_, index) => (
-                                <li key={index}>
-                                    <button
-                                        onClick={() => paginate(index + 1)}
-                                        className={`px-3 py-1 border border-gray-300 rounded-md ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100'}`}
-                                    >
-                                        {index + 1}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    </nav>
-                )}
             </main>
         </div>
     );
