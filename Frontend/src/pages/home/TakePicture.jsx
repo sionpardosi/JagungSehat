@@ -48,7 +48,7 @@ const TakePicture = () => {
                 stream.getTracks().forEach((track) => track.stop());
             }
         };
-    }, [stream]); 
+    }, []); 
 
     const handleCapture = () => {
         if (!videoRef.current || !canvasRef.current) return;
@@ -87,8 +87,9 @@ const TakePicture = () => {
     };
 
     const handleCancel = () => {
-        if (stream) {
-            stream.getTracks().forEach((track) => track.stop());
+        if (videoRef.current?.srcObject) {
+            videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+            videoRef.current.srcObject = null;
         }
         navigate(-1);
     };
